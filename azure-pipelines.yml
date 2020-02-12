@@ -47,6 +47,7 @@ stages:
           $(workingDirectory)/*.csproj
         arguments: --output $(System.DefaultWorkingDirectory)/publish_output --configuration Release
 
+
     - task: ArchiveFiles@2
       displayName: 'Archive files'
       inputs:
@@ -75,11 +76,14 @@ stages:
       runOnce:
         deploy:
           steps:
+
           - task: DotNetCoreCLI@2
             inputs:
-              command: test
-              projects: '**/*Tests/*.csproj'
+              command: 'test'
+              projects: 'testsDirectory: ''$(System.DefaultWorkingDirectory)/source/tests/SampleAzureFunctionCode.Tests'''
               arguments: '--configuration Release'
+              testRunTitle: 'Run_Unit_Test'
+          
 
 - stage: Dev_Deployment
   displayName: Dev Deployment stage
