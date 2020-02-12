@@ -74,14 +74,12 @@ stages:
     strategy:
       runOnce:
         deploy:
-
           steps:
-          - script: dotnet test $(System.DefaultWorkingDirectory)\source\tests\SampleAzureFunctionCode.Tests\SampleAzureFunctionCode.Tests.csproj --logger trx --collect "Code coverage"
-          - task: PublishTestResults@2
-            condition: succeededOrFailed()
+          - task: DotNetCoreCLI@2
             inputs:
-              testRunner: VSTest
-              testResultsFiles: '**/*.trx'
+              command: test
+              projects: '**/*Tests/*.csproj'
+              arguments: '--configuration $(buildConfiguration)'
 
 - stage: Dev_Deployment
   displayName: Dev Deployment stage
