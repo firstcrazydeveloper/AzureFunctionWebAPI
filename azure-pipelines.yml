@@ -5,15 +5,14 @@
 
 trigger:
 - master
+- branch
 
 variables:
   # Azure Resource Manager connection created during pipeline creation
   devazureSubscription: 'f27beff6-c5b7-41a5-bd50-2b9fce4760ca'
-  uatazureSubscription: '3cbc4c8e-ac04-4fb1-89e9-970ed859c881'
 
   # Function app name
   devFunctionAppName: 'fcd-dev-web-app'
-  uatFunctionAppName: 'fcd-uat-web-app'
 
   # Agent VM image name
   vmImageName: 'vs2017-win2016'
@@ -79,27 +78,3 @@ stages:
   
   
               
-- stage: UAT_Deployment
-  displayName: UAT Deployment stage
-  dependsOn: Dev_Deployment
-  condition: succeeded()
-
-  jobs:
-  - deployment: UAT_Deployment
-    displayName: Deploy
-    environment: 'testing'
-    pool:
-      vmImage: $(vmImageName)
-
-    strategy:
-      runOnce:
-        deploy:
-
-          steps:
-          - task: AzureFunctionApp@1
-            displayName: 'Azure functions app deploy'
-            inputs:
-              azureSubscription: '$(uatazureSubscription)'
-              appType: functionApp
-              appName: $(uatFunctionAppName)
-              package: '$(Pipeline.Workspace)/drop/$(Build.BuildId).zip'
