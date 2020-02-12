@@ -75,6 +75,7 @@ stages:
               command: 'build'
               projects: |
                 $(testsDirectory)/*.csproj
+              arguments: --output $(System.DefaultWorkingDirectory)/tests_publish_output --configuration Release
           - task: VSTest@2
             inputs:
               testSelector: 'testAssemblies'
@@ -82,11 +83,12 @@ stages:
                 **\*test*.dll
                 !**\*TestAdapter.dll
                 !**\obj\**
-              searchFolder: '$(testsDirectory)'
+                SampleAzureFunctionCode.Tests.dll
+              searchFolder: '$(System.DefaultWorkingDirectory)/tests_publish_output'
 
 - stage: Dev_Deployment
   displayName: Dev Deployment stage
-  dependsOn: Build
+  dependsOn: Build_Test
   condition: succeeded()
 
   jobs:
