@@ -11,7 +11,7 @@ variables:
   azureSubscription: '7ce8353f-d4fe-4f62-b94a-6af322f23756'
 
   # Function app name
-  functionAppName: 'fcd-web-app'
+  functionAppName: 'fcd-dev-web-app'
 
   # Agent VM image name
   vmImageName: 'vs2017-win2016'
