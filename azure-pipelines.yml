@@ -33,6 +33,13 @@ stages:
 
     steps:
     - task: DotNetCoreCLI@2
+      displayName: 'Install dotnetsay'
+      inputs:
+        command: custom
+        custom: tool
+        arguments: 'install -g dotnetsay'
+
+    - task: DotNetCoreCLI@2
       displayName: Build
       inputs:
         command: 'build'
@@ -70,21 +77,17 @@ stages:
 
           steps:
           - task: DotNetCoreCLI@2
-            displayName: Build
             inputs:
-              command: 'build'
-              projects: |
-                $(testsDirectory)/*.csproj
-              arguments: --output $(System.DefaultWorkingDirectory)/tests_publish_output --configuration Release
-          - task: VSTest@2
+              command: test
+              projects: $(testsDirectory)/*.csproj
+              arguments: --configuration Release          
+
+          - script: dotnet test $(testsDirectory)/SampleAzureFunctionCode.Tests.csproj --logger trx --collect "Code coverage"
+          - task: PublishTestResults@2
+            condition: succeededOrFailed()
             inputs:
-              testSelector: 'testAssemblies'
-              testAssemblyVer2: |
-                **\*test*.dll
-                !**\*TestAdapter.dll
-                !**\obj\**
-                SampleAzureFunctionCode.Tests.dll
-              searchFolder: '$(System.DefaultWorkingDirectory)/tests_publish_output'
+              testRunner: VSTest
+              testResultsFiles: '**/*.trx'
 
 - stage: Dev_Deployment
   displayName: Dev Deployment stage
