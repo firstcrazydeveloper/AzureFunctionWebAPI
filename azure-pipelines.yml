@@ -76,12 +76,6 @@ stages:
         deploy:
 
           steps:
-          - task: DotNetCoreCLI@2
-            inputs:
-              command: test
-              projects: $(testsDirectory)/*.csproj
-              arguments: --configuration Release          
-
           - script: dotnet test $(System.DefaultWorkingDirectory)\source\tests\SampleAzureFunctionCode.Tests\SampleAzureFunctionCode.Tests.csproj --logger trx --collect "Code coverage"
           - task: PublishTestResults@2
             condition: succeededOrFailed()
