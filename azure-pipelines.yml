@@ -11,7 +11,8 @@ variables:
   azureSubscription: 'f27beff6-c5b7-41a5-bd50-2b9fce4760ca'
 
   # Function app name
-  functionAppName: 'fcd-dev-web-app'
+  devFunctionAppName: 'fcd-dev-web-app'
+  uatFunctionAppName: 'fcd-dev-web-app'
 
   # Agent VM image name
   vmImageName: 'vs2017-win2016'
@@ -50,15 +51,17 @@ stages:
     - publish: $(Build.ArtifactStagingDirectory)/$(Build.BuildId).zip
       artifact: drop
 
-- stage: Deploy
-  displayName: Deploy stage
+- stage: Deployment
+  displayName: Deployment stage
   dependsOn: Build
   condition: succeeded()
 
   jobs:
-  - deployment: Deploy
+  - deployment: Dev Environment Deploy
+  
+  - deployment: UAT Environment Deploy
     displayName: Deploy
-    environment: 'development'
+    environment: 'testing'
     pool:
       vmImage: $(vmImageName)
 
@@ -72,5 +75,5 @@ stages:
             inputs:
               azureSubscription: '$(azureSubscription)'
               appType: functionApp
-              appName: $(functionAppName)
+              appName: $(uatFunctionAppName)
               package: '$(Pipeline.Workspace)/drop/$(Build.BuildId).zip'
