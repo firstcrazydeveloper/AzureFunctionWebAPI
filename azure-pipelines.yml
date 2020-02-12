@@ -51,6 +51,32 @@ stages:
     - publish: $(Build.ArtifactStagingDirectory)/$(Build.BuildId).zip
       artifact: drop
 
+- stage: Build_Test
+  displayName: Run Test Cases
+  dependsOn: Build
+  condition: succeeded()
+
+  jobs:
+  - deployment: Run_Test_Cases
+    displayName: Run Test Cases
+    environment: 'development'
+    pool:
+      vmImage: $(vmImageName)
+
+    strategy:
+      runOnce:
+        deploy:
+
+          steps:
+          - task: VSTest@2
+            inputs:
+              testSelector: 'testAssemblies'
+              testAssemblyVer2: |
+                **\*test*.dll
+                !**\*TestAdapter.dll
+                !**\obj\**
+              searchFolder: '$(System.DefaultWorkingDirectory)'
+
 - stage: Dev_Deployment
   displayName: Dev Deployment stage
   dependsOn: Build
