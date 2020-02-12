@@ -51,8 +51,8 @@ stages:
     - publish: $(Build.ArtifactStagingDirectory)/$(Build.BuildId).zip
       artifact: drop
 
-- stage: Dev Deployment
-  displayName: Deployment stage
+- stage: Dev_Deployment
+  displayName: Dev Deployment stage
   dependsOn: Build
   condition: succeeded()
 
@@ -68,7 +68,7 @@ stages:
         deploy:
 
           steps:
-          - task: AzureFunctionAppDevDeployment
+          - task: AzureFunctionApp@1
             displayName: 'Azure functions app deploy'
             inputs:
               azureSubscription: '$(azureSubscription)'
@@ -78,8 +78,8 @@ stages:
   
   
               
-- stage: UAT Deployment
-  displayName: Deployment stage
+- stage: UAT_Deployment
+  displayName: UAT Deployment stage
   dependsOn: Build
   condition: succeeded()
 
@@ -95,7 +95,7 @@ stages:
         deploy:
 
           steps:
-          - task: AzureFunctionAppTestingDeployment
+          - task: AzureFunctionApp@1
             displayName: 'Azure functions app deploy'
             inputs:
               azureSubscription: '$(azureSubscription)'
