@@ -5,7 +5,7 @@
 
 trigger:
 - master
-- branch
+- feature/*
 
 variables:
   # Azure Resource Manager connection created during pipeline creation
@@ -19,6 +19,7 @@ variables:
 
   # Working Directory
   workingDirectory: '$(System.DefaultWorkingDirectory)/source/src/SampleAzureFunctionCode'
+  testsDirectory: '$(System.DefaultWorkingDirectory)/source/tests/SampleAzureFunctionCode.Tests'
 
 stages:
 - stage: Build
@@ -68,6 +69,12 @@ stages:
         deploy:
 
           steps:
+          - task: DotNetCoreCLI@2
+            displayName: Build
+            inputs:
+              command: 'build'
+              projects: |
+                $(testsDirectory)/*.csproj
           - task: VSTest@2
             inputs:
               testSelector: 'testAssemblies'
@@ -75,7 +82,7 @@ stages:
                 **\*test*.dll
                 !**\*TestAdapter.dll
                 !**\obj\**
-              searchFolder: '$(System.DefaultWorkingDirectory)'
+              searchFolder: '$(testsDirectory)'
 
 - stage: Dev_Deployment
   displayName: Dev Deployment stage
