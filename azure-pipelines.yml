@@ -79,12 +79,12 @@ stages:
         custom: tool
         arguments: 'install -g dotnetsay'
 
-    - task: DotNetCoreCLI@2
+    - script: dotnet test $(System.DefaultWorkingDirectory)/source/tests/SampleAzureFunctionCode.Tests/SampleAzureFunctionCode.Tests.csproj --logger trx --collect "Code coverage"
+    - task: PublishTestResults@2
       inputs:
-        command: 'test'
-        projects: 'testsDirectory: ''$(System.DefaultWorkingDirectory)/source/tests/SampleAzureFunctionCode.Tests'''
-        arguments: '--configuration Release'
-        testRunTitle: 'Run_Unit_Test'
+        testRunner: VSTest
+        testResultsFiles: '**/*.trx'   
+    
 
 - stage: Dev_Deployment
   displayName: Dev Deployment stage
