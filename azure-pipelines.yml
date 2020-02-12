@@ -60,34 +60,35 @@ stages:
     - publish: $(Build.ArtifactStagingDirectory)/$(Build.BuildId).zip
       artifact: drop
 
-- stage: Build_Test
+- stage: Start_Run_Test
   displayName: Run Test Cases
   dependsOn: Build
   condition: succeeded()
 
   jobs:
-  - deployment: Run_Test_Cases
-    displayName: Run Test Cases
-    environment: 'development'
+  - job: Start_Run_Test
+    displayName: Test Builder
     pool:
       vmImage: $(vmImageName)
 
-    strategy:
-      runOnce:
-        deploy:
-          steps:
+    steps:
+    - task: DotNetCoreCLI@2
+      displayName: 'Install dotnetsay'
+      inputs:
+        command: custom
+        custom: tool
+        arguments: 'install -g dotnetsay'
 
-          - task: DotNetCoreCLI@2
-            inputs:
-              command: 'test'
-              projects: 'testsDirectory: ''$(System.DefaultWorkingDirectory)/source/tests/SampleAzureFunctionCode.Tests'''
-              arguments: '--configuration Release'
-              testRunTitle: 'Run_Unit_Test'
-          
+    - task: DotNetCoreCLI@2
+      inputs:
+        command: 'test'
+        projects: 'testsDirectory: ''$(System.DefaultWorkingDirectory)/source/tests/SampleAzureFunctionCode.Tests'''
+        arguments: '--configuration Release'
+        testRunTitle: 'Run_Unit_Test'
 
 - stage: Dev_Deployment
   displayName: Dev Deployment stage
-  dependsOn: Build_Test
+  dependsOn: Start_Run_Test
   condition: succeeded()
 
   jobs:
