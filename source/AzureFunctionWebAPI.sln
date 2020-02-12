@@ -1,0 +1,32 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.29613.14
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{ADFFDCFD-6BF4-4D0C-A15C-9F18C6474074}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{38DBB944-59DD-469F-A94D-15F486AC784E}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SampleAzureFunctionCode", "src\SampleAzureFunctionCode\SampleAzureFunctionCode.csproj", "{87F2BA38-D1A0-4591-9F83-057FB9445E09}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{87F2BA38-D1A0-4591-9F83-057FB9445E09}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{87F2BA38-D1A0-4591-9F83-057FB9445E09}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{87F2BA38-D1A0-4591-9F83-057FB9445E09}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{87F2BA38-D1A0-4591-9F83-057FB9445E09}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{87F2BA38-D1A0-4591-9F83-057FB9445E09} = {ADFFDCFD-6BF4-4D0C-A15C-9F18C6474074}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {F2DFECB7-CE32-4FF2-A23D-BF653D1C5F3B}
+	EndGlobalSection
+EndGlobal
