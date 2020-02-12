@@ -57,9 +57,26 @@ stages:
   condition: succeeded()
 
   jobs:
-  - deployment: Dev Environment Deploy
+  - deployment: Dev_Deployment
+    displayName: Deploy
+    environment: 'development'
+    pool:
+      vmImage: $(vmImageName)
+
+    strategy:
+      runOnce:
+        deploy:
+
+          steps:
+          - task: AzureFunctionApp@1
+            displayName: 'Azure functions app deploy'
+            inputs:
+              azureSubscription: '$(azureSubscription)'
+              appType: functionApp
+              appName: $(devFunctionAppName)
+              package: '$(Pipeline.Workspace)/drop/$(Build.BuildId).zip'
   
-  - deployment: UAT Environment Deploy
+  - deployment: UAT_Deployment
     displayName: Deploy
     environment: 'testing'
     pool:
