@@ -129,7 +129,7 @@ stages:
             inputs:
               azureSubscription: 'AzureFunction'
               appType: functionApp
-              appName: $(devFunctionAppName)
+              appName: $(functionAppName)
               package: '$(Pipeline.Workspace)/drop/$(Build.BuildId).zip'
   
   
