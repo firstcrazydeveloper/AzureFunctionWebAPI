@@ -7,8 +7,8 @@ $functionAppName = "fcd-dev-web-app-abc"
 $TemplateParams = @{"appName" = $functionAppName}
 
 
-Register-AzResourceProvider -ProviderNamespace "microsoft.web"
-Register-AzResourceProvider -ProviderNamespace "microsoft.storage"
+az provider register --namespace "microsoft.web"
+az provider register --namespace "microsoft.storage"
 
 $checkResourceGroupName = Get-AzResource -ResourceGroupName $resourceGroupName
 if($checkResourceGroupName -eq $null){
