@@ -1,10 +1,8 @@
 param(
   [Parameter(Mandatory = $true)][String]$templateLocation,
   [Parameter(Mandatory = $false)][String]$resourceGroupName = "fcd-dev-function",
-  [Parameter(Mandatory = $false)][String]$functionAppName = "centralus"
-  [Parameter(Mandatory = $false)][String]$location = "centralus"
-  
-)
+  [Parameter(Mandatory = $false)][String]$functionAppName = "fcd-dev-web-app",
+  [Parameter(Mandatory = $false)][String]$location = "centralus")
 
 # Create the parameters for the file, which for this template is the function app name.
 # $TemplateParams = @{"appName" = $functionAppName}
