@@ -1,7 +1,7 @@
 # Register Resource Providers if they're not already registered
 
-$resourceGroupName = "fcd-dev-webapp-abc-old"
-$functionAppName = "fcd-dev-web-app-abc-old"
+$resourceGroupName = "fcd-dev-function"
+$functionAppName = "fcd-dev-web-app"
 
 # Create the parameters for the file, which for this template is the function app name.
 $TemplateParams = @{"appName" = $functionAppName}
@@ -10,24 +10,24 @@ $TemplateParams = @{"appName" = $functionAppName}
 az provider register --namespace "microsoft.web"
 az provider register --namespace "microsoft.storage"
 
+$resourceExist = az group exists -n $resourceGroupName
 
-if(!az group exists -n $resourceGroupName){
+if($resourceExist -eq $true){
     # Create a resource group for the function app
-	az group create -n "fcd-dev-webapp-new" -l 'West Europe'
+	Write-Host "resources exist"
 }
-else{
-    Write-Host "$resourceGroupName already exist"
+else{    
+	Write-Host "resources not exist"
+	az group create -n $resourceGroupName -l 'West Europe'
 }
 
 $checkFunctionAppName = az functionapp show -g $resourceGroupName -n $functionAppName 
 if($checkFunctionAppName -eq $null){
    # Deploy the template
-az group deployment create -g @resourceGroupName --template-file azurefunctiondeploy.json --parameters $TemplateParams
+   Write-Host "function not exist"
+	az group deployment create --resource-group $resourceGroupName --template-file azurefunctiondeploy.json --parameters appName=$functionAppName --verbose
+	
 }
 else{
-    Write-Host "$functionAppName already exist"
+    Write-Host "function exist"
 }
-
-
-
-
