@@ -86,7 +86,7 @@ stages:
         testResultsFiles: '**/*.trx'   
     
 - stage: Resource_Deployment
-  displayName: Run Test Cases
+  displayName: Resource Deployment
   dependsOn: Start_Run_Test
   condition: succeeded()
 
@@ -102,16 +102,13 @@ stages:
       inputs:
         azureSubscription: 'AzureFunction'
         ScriptPath: $(System.DefaultWorkingDirectory)/config/config.ps1'
+        azurePowerShellVersion: LatestVersion
 
-    - script: dotnet test $(System.DefaultWorkingDirectory)/source/tests/SampleAzureFunctionCode.Tests/SampleAzureFunctionCode.Tests.csproj --logger trx --collect "Code coverage"
-    - task: PublishTestResults@2
-      inputs:
-        testRunner: VSTest
-        testResultsFiles: '**/*.trx'
+   
 
 - stage: Dev_Deployment
   displayName: Dev Deployment stage
-  dependsOn: Start_Run_Test
+  dependsOn: Resource_Deployment
   condition: succeeded()
 
   jobs:
@@ -129,7 +126,7 @@ stages:
           - task: AzureFunctionApp@1
             displayName: 'Azure functions app deploy'
             inputs:
-              azureSubscription: '$(devazureSubscription)'
+              azureSubscription: 'AzureFunction'
               appType: functionApp
               appName: $(devFunctionAppName)
               package: '$(Pipeline.Workspace)/drop/$(Build.BuildId).zip'
