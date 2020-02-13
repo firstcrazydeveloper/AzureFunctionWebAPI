@@ -27,8 +27,6 @@ variables:
 stages:
 - stage: Resource_Deployment
   displayName: Resource Deployment
-  dependsOn: Start_Run_Test
-  condition: succeeded()
 
   jobs:
   - job: Start_Resource_Deployment
