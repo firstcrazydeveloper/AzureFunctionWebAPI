@@ -2,7 +2,8 @@ param(
   [Parameter(Mandatory = $true)][String]$templateLocation,
   [Parameter(Mandatory = $false)][String]$resourceGroupName = "fcd-dev-function",
   [Parameter(Mandatory = $false)][String]$functionAppName = "fcd-dev-web-app",
-  [Parameter(Mandatory = $false)][String]$location = "centralus")
+  [Parameter(Mandatory = $false)][String]$location = "centralus",
+  [Parameter(Mandatory = $false)][String]$runtime = "dotnet")
 
 # Create the parameters for the file, which for this template is the function app name.
 # $TemplateParams = @{"appName" = $functionAppName}
@@ -12,6 +13,7 @@ az provider register --namespace "microsoft.web"
 az provider register --namespace "microsoft.storage"
 
 $resourceExist = az group exists -n $resourceGroupName
+
 
 if($resourceExist -eq $true){
     # Create a resource group for the function app
@@ -26,7 +28,7 @@ $checkFunctionAppName = az functionapp show -g $resourceGroupName -n $functionAp
 if($checkFunctionAppName -eq $null){
    # Deploy the template
    Write-Host "function not exist"
-	az group deployment create --resource-group $resourceGroupName --template-file $templateLocation --parameters appName=$functionAppName --verbose
+	az group deployment create --resource-group $resourceGroupName --template-file $templateLocation --parameters appName=$functionAppName runtime=$runtime --verbose
 	
 }
 else{
