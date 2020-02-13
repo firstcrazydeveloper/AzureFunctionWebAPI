@@ -11,7 +11,7 @@ az provider register --namespace "microsoft.web"
 az provider register --namespace "microsoft.storage"
 
 
-if(! az group exists $resourceGroupName){
+if(!az group exists -n $resourceGroupName){
     # Create a resource group for the function app
 	az group create -n "fcd-dev-webapp-new" -l 'West Europe'
 }
