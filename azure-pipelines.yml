@@ -101,7 +101,7 @@ stages:
       displayName: 'Resource Deployment'
       inputs:
         azureSubscription: 'AzureFunction'
-        ScriptPath: $(System.DefaultWorkingDirectory)/config/config.ps1'
+        ScriptPath: $(System.DefaultWorkingDirectory)/config/config.ps1
         azurePowerShellVersion: LatestVersion
 
    
