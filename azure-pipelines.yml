@@ -12,8 +12,6 @@ variables:
   devazureSubscription: 'f27beff6-c5b7-41a5-bd50-2b9fce4760ca'
 
   # Function app name
-  devFunctionAppName: 'fcd-dev-web-app'
-
   resourceGroupName: 'fcd-dev-function'
   functionAppName: 'fcd-dev-web-app'
   location: 'centralus'
@@ -27,8 +25,29 @@ variables:
   testsDirectory: '$(System.DefaultWorkingDirectory)/source/tests/SampleAzureFunctionCode.Tests'
 
 stages:
+- stage: Resource_Deployment
+  displayName: Resource Deployment
+  dependsOn: Start_Run_Test
+  condition: succeeded()
+
+  jobs:
+  - job: Start_Resource_Deployment
+    displayName: Resources
+    pool:
+      vmImage: $(vmImageName)
+
+    steps:
+    - task: AzureCLI@2
+      displayName: 'Resource Deployment'
+      inputs:
+        azureSubscription: 'AzureFunction'
+        scriptType: ps
+        scriptPath: '$(System.DefaultWorkingDirectory)/config/config.ps1'
+        scriptArguments: $(templateLocation) $(resourceGroupName) $(functionAppName) $(location)
 - stage: Build
   displayName: Build stage
+  dependsOn: Resource_Deployment
+  condition: succeeded()
 
   jobs:
   - job: Build
@@ -90,31 +109,9 @@ stages:
         testRunner: VSTest
         testResultsFiles: '**/*.trx'   
     
-- stage: Resource_Deployment
-  displayName: Resource Deployment
-  dependsOn: Start_Run_Test
-  condition: succeeded()
-
-  jobs:
-  - job: Start_Resource_Deployment
-    displayName: Resources
-    pool:
-      vmImage: $(vmImageName)
-
-    steps:
-    - task: AzureCLI@2
-      displayName: 'Resource Deployment'
-      inputs:
-        azureSubscription: 'AzureFunction'
-        scriptType: ps
-        scriptPath: '$(System.DefaultWorkingDirectory)/config/config.ps1'
-        scriptArguments: $(templateLocation) $(resourceGroupName) $(functionAppName) $(location)
-
-   
-
 - stage: Dev_Deployment
   displayName: Dev Deployment stage
-  dependsOn: Resource_Deployment
+  dependsOn: Start_Run_Test
   condition: succeeded()
 
   jobs:
