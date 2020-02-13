@@ -11,7 +11,7 @@ az provider register --namespace "microsoft.web"
 az provider register --namespace "microsoft.storage"
 
 
-if($(az group exists --name $resourceGroupName) == false){
+if(! az group exists $resourceGroupName){
     # Create a resource group for the function app
 	az group create -n "fcd-dev-webapp-new" -l 'West Europe'
 }
@@ -19,7 +19,7 @@ else{
     Write-Host "$resourceGroupName already exist"
 }
 
-$checkFunctionAppName = az resource show -g $resourceGroupName -n $functionAppName 
+$checkFunctionAppName = az functionapp show -g $resourceGroupName -n $functionAppName 
 if($checkFunctionAppName -eq $null){
    # Deploy the template
 az group deployment create -g @resourceGroupName --template-file azurefunctiondeploy.json --parameters $TemplateParams
