@@ -14,6 +14,11 @@ variables:
   # Function app name
   devFunctionAppName: 'fcd-dev-web-app'
 
+  resourceGroupName: 'fcd-dev-function'
+  functionAppName: 'fcd-dev-web-app'
+  location: 'centralus'
+  templateLocation : '$(System.DefaultWorkingDirectory)/config/azurefunctiondeploy.json'
+
   # Agent VM image name
   vmImageName: 'vs2017-win2016'
 
@@ -103,6 +108,7 @@ stages:
         azureSubscription: 'AzureFunction'
         scriptType: ps
         scriptPath: '$(System.DefaultWorkingDirectory)/config/config.ps1'
+        scriptArguments: $(templateLocation) $(resourceGroupName) $(functionAppName) $(location)
 
    
 
