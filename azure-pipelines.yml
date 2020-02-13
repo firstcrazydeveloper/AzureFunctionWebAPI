@@ -12,7 +12,7 @@ variables:
   devazureSubscription: 'f27beff6-c5b7-41a5-bd50-2b9fce4760ca'
 
   # Function app name
-  devFunctionAppName: 'fcd-dev-web-app-abc'
+  devFunctionAppName: 'fcd-dev-web-app'
 
   # Agent VM image name
   vmImageName: 'vs2017-win2016'
