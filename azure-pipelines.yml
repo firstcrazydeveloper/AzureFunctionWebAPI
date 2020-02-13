@@ -97,12 +97,12 @@ stages:
       vmImage: $(vmImageName)
 
     steps:
-    - task: AzurePowerShell@3
+    - task: AzureCLI@2
       displayName: 'Resource Deployment'
       inputs:
         azureSubscription: 'AzureFunction'
-        ScriptPath: $(System.DefaultWorkingDirectory)/config/config.ps1
-        azurePowerShellVersion: LatestVersion
+        scriptType: ps
+        scriptPath: '$(System.DefaultWorkingDirectory)/config/config.ps1'
 
    
 
