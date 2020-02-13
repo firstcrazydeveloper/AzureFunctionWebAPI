@@ -10,8 +10,8 @@ $TemplateParams = @{"appName" = $functionAppName}
 az provider register --namespace "microsoft.web"
 az provider register --namespace "microsoft.storage"
 
-$checkResourceGroupName = az resource show -g $resourceGroupName
-if($checkResourceGroupName -eq $null){
+
+if($(az group exists --name $resourceGroupName) == false){
     # Create a resource group for the function app
 	az group create -n "fcd-dev-webapp-new" -l 'West Europe'
 }
