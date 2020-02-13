@@ -12,7 +12,7 @@ variables:
   devazureSubscription: 'f27beff6-c5b7-41a5-bd50-2b9fce4760ca'
 
   # Function app name
-  devFunctionAppName: 'fcd-dev-web-app'
+  devFunctionAppName: 'fcd-dev-web-app-abc'
 
   # Agent VM image name
   vmImageName: 'vs2017-win2016'
@@ -85,6 +85,29 @@ stages:
         testRunner: VSTest
         testResultsFiles: '**/*.trx'   
     
+- stage: Resource_Deployment
+  displayName: Run Test Cases
+  dependsOn: Start_Run_Test
+  condition: succeeded()
+
+  jobs:
+  - job: Start_Resource_Deployment
+    displayName: Resources
+    pool:
+      vmImage: $(vmImageName)
+
+    steps:
+    - task: AzurePowerShell@3
+      displayName: 'Resource Deployment'
+      inputs:
+        azureSubscription: 'AzureFunction'
+        ScriptPath: $(System.DefaultWorkingDirectory)/config/config.ps1'
+
+    - script: dotnet test $(System.DefaultWorkingDirectory)/source/tests/SampleAzureFunctionCode.Tests/SampleAzureFunctionCode.Tests.csproj --logger trx --collect "Code coverage"
+    - task: PublishTestResults@2
+      inputs:
+        testRunner: VSTest
+        testResultsFiles: '**/*.trx'
 
 - stage: Dev_Deployment
   displayName: Dev Deployment stage
